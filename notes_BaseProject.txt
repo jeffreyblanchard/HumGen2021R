@@ -1,0 +1,13 @@
+Install
+  x Creating a new RMarkdown file installs necessary pacages
+  x tidyverse
+  x plotly
+  x DT
+  x gganimate
+  x transformr
+  x maps
+  x mapdata
+  x viridis
+  x wesanderson
+  x BiocManager
+  x BiocManager::install()

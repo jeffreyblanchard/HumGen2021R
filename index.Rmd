@@ -8,7 +8,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-This is a rendering of hmtl files from the course repository  (https://github.com/jeffreyblanchard/RGenome2021) for Human Genome Analysis taught at the University of Massachusetts Amherst in Spring 2021 by Prof. Jeffrey Blanchard
+This is a rendering of hmtl files from the course repository  (https://github.com/jeffreyblanchard/RGenome2021) for Human Genome Analysis taught at the University of Massachusetts Amherst in Spring 2021 by Prof. Jeffrey Blanchard.
 
 ## Labs
 
