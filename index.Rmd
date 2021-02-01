@@ -1,0 +1,15 @@
+---
+title: "Human Genome Analysis"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+editor_options: 
+  chunk_output_type: console
+---
+
+This is a rendering of hmtl files from the course repository  (https://github.com/jeffreyblanchard/RGenome2021) for Human Genome Analysis taught at the University of Massachusetts Amherst in Spring 2021 by Prof. Jeffrey Blanchard
+
+## Labs
+
+* Lab 1 : [Introduction to R and Reproducible Research](HumGen_Lab1.html)
