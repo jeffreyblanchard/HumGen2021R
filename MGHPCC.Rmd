@@ -1,0 +1,40 @@
+---
+title: "697 specific notes for using R and RStudio"
+output:
+  html_document:
+    toc: true
+    toc_depth : 4
+    theme: united
+    highlight: tango
+editor_options: 
+  chunk_output_type: console
+---
+
+### Installing R and RStudio on your computer
+
+1. Install the latest release (2020-10-10, Bunny-Wunnies Freak Out) R-4.0.3 of R from <a href="http://cran.r-project.org/">CRAN</a> and follow the installation instructions. 
+
+2. Install <a href="http://www.rstudio.org/">R Studio</a>, a nice graphical interface for working with R.  
+
+### University of Massachusetts Green High Performance Computing Cluster (MGHPCC)
+
+Early steps in genome data processing, particularly assembly and read mapping are computational intensive. Even with a modest data set of a few dozen samples it is difficult/impossible to do on your lap. And who wants to bog down there or another computer for long periods of time (only to run out of memory). If you are taking the graduate version (697) of this class please register for a MGPHCC account -  https://www.umassrc.org/hpc/index.php The MGHPCC is an intercollegiate high-performance computing facility located in Holyoke, Massachusetts. MGHPCC is for research computing, only Principal Investigators (PIs) as defined by the local school and their staff or authorized collaborators may receive accounts on MGHPCC.  PI authorization is required for all new account requests.  For more details see - http://wiki.umassrc.org/wiki/index.php/Main_Page.  Do not list me as the PI unless you are working in research lab.
+
+See the [MGHPCC login](https://www.umassrc.org/wiki/index.php/Connecting_to_the_Cluster) for instructions on how to log in. On Linux and OSX computers SSH is available through the __Terminal__ application that is already installed. For Windows users the most popular option is to download [Putty](https://www.chiark.greenend.org.uk/~sgtatham/putty/).
+
+To transfer data see instructions on [MGHPCC data transfer](https://www.umassrc.org/wiki/index.php/Transferring_Data). Most of what we do in this class can be run using interactive mode.  
+
+#### Logging into MGHPCC and your directory structure
+
+You should have both an individual and lab workspace. The lab works space is in 
+
+/project/uma_[NAME_OF_PI] e.g. 
+
+```
+cd /project/uma_jeffrey_blanchard
+```
+
+### RStudio interface to MGHPCC
+
+You can use an RStudio web interface to access MGHPCC in addition to accessing the cluster via the command line. Open OnDemand provides a web interface to a number of cluster resources including RStudio and Jupyter Notebook, and Gnome X11 desktop.  Current users of the cluster can log in to this web interface at https://www.umassrc.org:444 from our local campus network or VPN using your cluster username and password. *Note you may need to set up a VPN for remote access. - https://www.umass.edu/it/support/vpn/howinstallanduseglobalprotectvpnclient 
+
