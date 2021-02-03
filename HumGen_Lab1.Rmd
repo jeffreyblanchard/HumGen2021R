@@ -254,14 +254,16 @@ y
 A logical value is created by comparison between variables.
 
 ```{r}
-x <- 1; y <- 2 
-z = x > y 
+x <- 1
+y <- 2 
+z <- x > y 
 z   
 ```
 Standard logical operations are "&" (and), "|" (or), and "!" (negation).
 
 ```{r}
-x <- TRUE; y <- FALSE 
+x <- TRUE
+y <- FALSE 
 x & y
 ``` 
 
