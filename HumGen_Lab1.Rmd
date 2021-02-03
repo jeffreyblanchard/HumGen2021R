@@ -90,7 +90,13 @@ There are also many workshops and online R courses that you could take to follow
 
 #### Bio497
 
-If you are an undergraduate in 497 go to [RStudio Cloud](https://rstudio.cloud/) and create an account. I will share the link for our Workspace in Chat.
+If you are an undergraduate in 497 go to [RStudio Cloud](https://rstudio.cloud/) and create an account. I will share the link for our Workspace in Chat. The steps are
+
+* Click on Link in Chat 
+* Join HumGen Workspace
+* Under your spaces select HumGen Workspace
+* Click on Project tab
+* Start assignment
 
 #### Bio697
 
