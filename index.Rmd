@@ -12,4 +12,5 @@ This is a rendering of hmtl files from the course repository  (https://github.co
 
 ## Labs
 
-* Lab 1 : [Introduction to R and Reproducible Research](HumGen_Lab1.html)
+* Lab 1 : [Introduction to R and Reproducible Research](HumGen_Lab1_intro.html)
+* Lab 2 : [Data wrangling 23andMe with the tidyverse](HumGen_Lab2_datawrangle.html)

@@ -345,7 +345,7 @@ For x = 2 and y = 3, Test x^5 is greater than y^4 and return a logical value
 
 ### Exercise 3
 
-Create a vector of the values 22, 62, 148, 43 and 129. Determine the sum of the vector.  Divide each value in the vector by the sum to determine relate frequency.
+Create a vector of the values 22, 62, 148, 43 and 129. Determine the sum of the vector.  Divide each value in the vector by the sum to determine relative frequency.
 
 ### Exercise 4
 
