@@ -300,6 +300,7 @@ We can click on the table to reorganize the data. If we sort the `cases` the hig
 ## Exercises
 
 Use the 23andMe Commplete data set (mySNPs_all) for the exercises
+
 ### Exercise 1
 
 Subset (select) the 23andMe Complete table to just position and genotype
