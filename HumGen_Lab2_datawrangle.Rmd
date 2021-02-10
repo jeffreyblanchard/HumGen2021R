@@ -257,6 +257,20 @@ mySNPs_all %>%
   count(genotype)
 ```
 
+
+```{r}
+mySNPs_all %>% 
+  count(chromosome)
+```
+
+Here is another way to do this that works
+
+```{r}
+mySNPs_all %>% 
+  group_by(chromosome) %>% 
+  summarise(snps = n())
+```
+
 To sort
 ```{r}
 mySNPs_all %>% 
@@ -269,6 +283,9 @@ mySNPs_all %>%
   group_by(chromosome, genotype) %>% 
   count(genotype)
 ```
+
+
+
 
 ## Making tables in R Markdown reports
 
