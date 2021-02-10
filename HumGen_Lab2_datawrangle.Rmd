@@ -38,7 +38,7 @@ If you are installing R packages from source code (as we will do later in the co
 Simple!!!
 
 ```{r, message=FALSE}
-# library(tidyverse)
+library(tidyverse)
 ```
 
 ...but it is easy to forget this step. Which will result in an error message when you try to use the libraries' functions.
