@@ -14,7 +14,9 @@ bibliography: data/references.bib
 ## Course examples
 
 ```{r}
-
+x = 5
+y = 6
+x + y
 ```
 
 ## Exercises
