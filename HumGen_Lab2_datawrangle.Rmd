@@ -252,7 +252,7 @@ UMass_COVID_data_filter <- UMass_COVID_data %>%
 UMass_COVID_data_filter
 ```
 
-Some more examples using the 23andMe data. To count the number of a factor in a category
+Some more examples using the 23andMe data. To count the sum of each level in a factor.
 
 ```{r}
 mySNPs_all %>% 
