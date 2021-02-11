@@ -259,17 +259,11 @@ mySNPs_all %>%
   count(genotype)
 ```
 
+However, count does not work within `summarize` See `tidyverse/dplyr` documentation for [Count observations by group](https://dplyr.tidyverse.org/reference/count.html). Insteas use `n()`. Hint: this is important for one of the exercises.
 
 ```{r}
 mySNPs_all %>% 
-  count(chromosome)
-```
-
-Here is another way to do this that works
-
-```{r}
-mySNPs_all %>% 
-  group_by(chromosome) %>% 
+  group_by(genotype) %>% 
   summarise(snps = n())
 ```
 
