@@ -314,7 +314,7 @@ Filter to just the MT chromosome and remove genotypes A and T. (you can use != t
 
 ### Exercise 3
 
-Use group_by() and summarize() to find the min positon, max position and total number of positions measured for each chromosome. 
+Use group_by() and summarize() to find the min positon, max position and number of positions (SNPs) measured for each chromosome. 
 
 ### Exercise 4
 
