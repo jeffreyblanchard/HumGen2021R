@@ -259,12 +259,12 @@ mySNPs_all %>%
   count(genotype)
 ```
 
-However, count does not work within `summarize` See `tidyverse/dplyr` documentation for [Count observations by group](https://dplyr.tidyverse.org/reference/count.html). Insteas use `n()`. Hint: this is important for one of the exercises.
+However, count does not work within `summarize` See `tidyverse/dplyr` documentation for [Count observations by group](https://dplyr.tidyverse.org/reference/count.html). Instead use `n()`. Hint: this is important for one of the exercises.
 
 ```{r}
 mySNPs_all %>% 
   group_by(genotype) %>% 
-  summarise(snps = n())
+  summarise(genotype_count = n())
 ```
 
 To sort
@@ -314,7 +314,7 @@ Filter to just the MT chromosome and remove genotypes A and T. (you can use != t
 
 ### Exercise 3
 
-Use group_by() and summarize() to find the min positon, max position and number of positions (SNPs) measured for each chromosome. 
+Use group_by() and summarize() to find the min positon, max position and number of positions (SNPs) measured for each chromosome. Note that each position represents a SNP, therefore the number of SNPs for a chromosome = the number of positions measured on each chromosome. 
 
 ### Exercise 4
 
