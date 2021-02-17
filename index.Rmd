@@ -14,3 +14,4 @@ This is a rendering of hmtl files from the course repository  (https://github.co
 
 * Lab 1 : [Introduction to R and Reproducible Research](HumGen_Lab1_intro.html)
 * Lab 2 : [Data wrangling 23andMe with the tidyverse](HumGen_Lab2_datawrangle.html)
+* Lab 3 : [Graphing with the ggplot](HumGen_Lab3_datavis.html)
