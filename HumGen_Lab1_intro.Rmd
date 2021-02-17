@@ -370,7 +370,7 @@ Lab Reports will be made using the RMarkdown notation. To make a Lab Report
 
 ` ```{r} `
 
-* When you are done Knit the file to generate a .html file (this is saved into the same folder as the .Rmd file).  
+* When you are done Knit the file to generate a .html file (this is automatically saved into the same folder as the .Rmd file). 
 
 ### What to turn in?
 
