@@ -42,13 +42,15 @@ library(tidyverse)
 
 You can make amazing graphs with ggplot, but there is a long learning curve so we will have multiple lab sessions on ggplot and graphing. Here are a few different resources for `ggplot`.
 
-* Hadley Wickham and Garrett Grolemund released a new book in 2017 [R for Data Science](http://r4ds.had.co.nz/).Chapter 3.1 to 3.5 covers material for this week's lab in ggplot.
+* Hadley Wickham and Garrett Grolemund released a new book in 2017 [R for Data Science](http://r4ds.had.co.nz/).  Chapter 3 covers material related to this week's lab in ggplot.
 * Another resource good for those with a visual learning style is [Maria Nattestad's Youtube videos](https://www.youtube.com/channel/UC2bWYX9h1KlaGWfTDuhASWg)
+* [ggplot cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
 
 ### Key board shortcuts
 
 * Selecting `shift` `ctrl` `m` at the same time is a keyboard shortcut for `%
-* Selecting `ctr` `alt` `i` at the same time is a keyboard shortcut for a new r code 
+* Selecting `ctr` `alt` `i` at the same time is a keyboard shortcut for a new r code (Windows keyboard layout)
+* Selecting `option` `command` `i` at the same time is a keyboard shortcut for a new r code (Mac keyboard layout)
 To see more shortcuts in the menu `Tools` → `Keyboard Shortcuts Help`.
 
 ## On the Computer
