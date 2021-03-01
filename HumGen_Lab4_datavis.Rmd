@@ -87,7 +87,7 @@ Remember not to display large tables in RMarkdown. Use the DT package for showin
 
 1. The format of the daily reports has changed over time. What are new data types (e.g. columns) that are were collected on 1/11/2021 relative to 3/11/2020? Load the both files into R directly from GitHub (see example above).  Note the in the more recent dates they have changed the column headers so that it is no longer necessary to rename `Province_State` and `Country_Region` (and will generate an error if applied). Use `str()` and `View()` (or in the top right corner click on Environment and then the data frame.).
 
-2. Determine the total Confirmed cases and Deaths for each of the above data for each country. Many countries have multiple entries representing different regions (e.g. counties and states). To get the counts for a country we need to summarise the data.  Use `group_by()` and `summarize()` to make a data frame (tibble) with total counts for each country. Report as a DT table.
+2. Determine the total Confirmed cases and Deaths for each of the above data for each country. Many countries have multiple entries representing different regions (e.g. counties and states). To get the counts for a country we need to summarise the data.  Use `group_by()` and `summarize()` to make a data frame (tibble) with total counts for each country. Report as a DT table. You can add a title to DT tables using `caption = "title"` . For more options see [DT: An R interface to the DataTables library](https://rstudio.github.io/DT/)
 
 3. To get counts for confirmed cases per U.S state use `filter()` to select US and `group_by` and `summarize` as above. Report as a DT table.
 
