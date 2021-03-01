@@ -566,7 +566,7 @@ summary {
 <li><p>Determine the total Confirmed cases and Deaths for each of the above data for each country. Many countries have multiple entries representing different regions (e.g. counties and states). To get the counts for a country we need to summarise the data. Use <code>group_by()</code> and <code>summarize()</code> to make a data frame (tibble) with total counts for each country. Report as a DT table. You can add a title to DT tables using <code>caption = &quot;title&quot;</code> . For more options see <a href="https://rstudio.github.io/DT/">DT: An R interface to the DataTables library</a></p></li>
 <li><p>To get counts for confirmed cases per U.S state use <code>filter()</code> to select US and <code>group_by</code> and <code>summarize</code> as above. Report as a DT table.</p></li>
 <li><p>It will be difficult to make simple graphs with the data from all countries in the world or even the US states. Use <code>arrange</code> and <code>slice()</code> to get just the top 10 countries for Deaths.</p></li>
-<li><p>Make plots using <code>geom_point()</code> of the top 10 countries with the deaths (two separate graphs) on 3/12/2020 and 1/12/2021. Include better x and y labels and a title.</p></li>
+<li><p>Make plots using <code>geom_point()</code> of the top 10 countries with the deaths (two separate graphs) on 3/11/2020 and 1/11/2021. Include better x and y labels and a title.</p></li>
 <li><p>Above the countries are ordered alphabetically. Make new graphs using <code>geom_bar</code> with the countries order by # of deaths (Hint use y = reorder(Country_Region, Deaths) ). To change the scale from scientific to numeric use scale_x_continuous(labels = scales::number).</p></li>
 </ol>
 </div>

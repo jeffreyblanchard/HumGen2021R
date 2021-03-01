@@ -93,7 +93,7 @@ Remember not to display large tables in RMarkdown. Use the DT package for showin
 
 4. It will be difficult to make simple graphs with the data from all countries in the world or even the US states. Use `arrange` and `slice()` to get just the top 10 countries for Deaths. 
 
-5. Make plots using `geom_point()` of the top 10 countries with the deaths (two separate graphs) on 3/12/2020 and 1/12/2021. Include better x and y labels and a title.
+5. Make plots using `geom_point()` of the top 10 countries with the deaths (two separate graphs) on 3/11/2020 and 1/11/2021. Include better x and y labels and a title.
 
 6. Above the countries are ordered alphabetically. Make new graphs using `geom_bar` with the countries order by # of deaths (Hint use y = reorder(Country_Region, Deaths) ). To change the scale from scientific to numeric use scale_x_continuous(labels = scales::number).
 
