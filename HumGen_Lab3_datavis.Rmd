@@ -1,111 +1,18 @@
 ---
-title: "Lab 4 : Data wrangling and graphing COVID-19 reporting data (Part 1)"
+title: "Lab 3 : Graphing with ggplot"
 output:
   html_document:
     toc: true
-    toc_depth : 4
+    toc_depth: 4
     theme: united
     highlight: tango
 editor_options: 
   chunk_output_type: console
 ---
 
-*I recognize, and fully understand, that this data maybe emotionally difficult to work. My intention is to make these lab relevant, allowing you to gather your own insights directly from new visualizations of the data. Please let me know if you would rather not work with the data.*
+## Learning objectives
 
-## Learning Objectives
-
-* Build on data wrangling skills
-* Understanding the sources of SARS-CoV-2 incidence reports
-* Accessing data remotely
-* Basic line and bar graphs with ggplot
-
-## Visualizing COVID-19 cases, deaths and recoveries
-
-The virus has been recently renamed based on phylogenetic analysis (more on this next week) severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The disease caused by the virus is coronavirus disease (COVID-19). In this lab we will work with reporting data on COVID-19 cases, deaths and recoveries. 
-
-### Introduction to JHU case tracking data
-
-Researchers (Ensheng Dong, Hongru Du, Lauren Gardner) at John Hopkins University developed an [interactive dashboard](https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) to visual data and track reported cases of coronavirus disease 2019 (SARS-CoV-2) in real time. The underlying data is collated from the following sources and updated several times a day.
-
-It is important to understand that this data is only as accurate as the reporting and many cases of the disease go unreported because of a lack of testing. This some countries may have have confirmed cases because of more comprehensive testing. Thus, the reporting data represent a minimum number of cases. See recent posts and an article by UMass statistian [Prof. Nick Reich](https://twitter.com/reichlab)
-
-JHU researchers make data that goes into the [dashboard](https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) available on [Github repo for Novel Coronavirus (COVID-19) Cases](https://github.com/CSSEGISandData/COVID-19). In this lab we will work with this data. 
-
-Let's take a look at the files and the structure of data in the files.
-
-* csse_covid_19_data
-  + csse_covid_19_daily_reports
-    - 03-11-2020.csv
-    
-Open up the file to look at the structure 
-    
-The file contains the columns 
-
-Province/State 	Country/Region 	Last Update 	Confirmed 	Deaths 	Recovered 	Latitude 	Longitude
-
-It is important to note that for some countries there is only one row, while for others (e.g. China and US) there are multiple rows representing different provinces or states. Thus, we will need to sum these rows to get a total count for the US and China when we make graphs. From experience in making this tutorial I know the Column names with __/__ will cause errors in ggplot (). 
-
-## On the Computer
-
-### Making a graphs from the daily reports
-
-We are going to work with the data using __tidyverse__ functions
-
-```{r, message=FALSE}
-library(tidyverse)
-```
-                 
-Let's start by plotting data from our last class on 3/11/2020 (the file looked at above). We can read data directly from the Github site. 
-
-1. Go to the file you want to download.
-2. Click it to view the contents within the GitHub UI.
-3. In the top right, right click the Raw button.
-4. Save as... or copy the url
-
-```{r, message=FALSE}
-report_03_11_2020 <-   read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-11-2020.csv")) %>%
-  rename(Country_Region = "Country/Region", Province_State = "Province/State")
-```
-
-Check the table properties to make sure the data imported as we expected
-
-```{r}
-str(report_03_11_2020)
-```
-
-Use `View()` (or in the top right corner click on Environment and then the data frame.) to inspect the data frame (tibbl)
-
-```{r}
-View(report_03_11_2020)
-```
-
-### Interactive data tables.  
-
-You can make interactive data tables with the DT package (https://rstudio.github.io/DT/)
-*** Don't do this with tables of hundreds of thousands of rows
-
-```{r}
-library(DT)
-datatable(report_03_11_2020)
-```
-
-### Key board shortcut for %>%
-
-Selecting `shift` `ctrl` `m` at the same time is a keyboard shortcut for `%>%`
-
-## Exercises (Part 1)
-
-Today's exercises involve the application of what you learned in the Data Carpentries tutorial to a new data set. This step in applying your skills is often hard at first. Take your time and reread the tutorials, then try some options. 
-
-Use the DT package for showing the data tables where appropriate.
-
-1. The format of the daily reports has changed over time. What are the differences between 3/12/2020, the Friday before spring break 2020 and yesterday 6 months later on 9/12/2020? Load the files into R and use `str()` and `View()` (or in the top right corner click on Environment and then the data frame.). Note the in the more recent dates they have changed the column headers so that it is no longer necessary to rename `Province_State` and `Country_Region`.
-
-2. Many countries have multiple entries representing different regions (e.g. counties and states). To get the counts for a country we need to summarise the data.  Use `group_by()` and `summarize()` to make a data frame (tibble) with total counts for each country.
-
-3. To get counts for confirmed cases per U.S state use `filter()` to select US and `group_by` and `summarize` as above.
-
-4. It will be difficult to make simple graphs with the data from all countries in the world or even the US states. Use `arrange_by()` and `slice()` to get just the top 10 countries for Deaths. 
+* ggplot
 
 ## Introduction to R Graphics
 
@@ -119,13 +26,13 @@ R provides comprehensive graphics utilities for visualizing and exploring scient
 
 ### Installation
 
-`ggplot2` is a R package, which is part of the tidyverse collections. As in the install of knitr in Lab 1 in the menu select TOOLS and then INSTALL PACKAGES. Install tidyverse (which includes `ggplot2` as well as other packages we will use later).
+`ggplot2` is a R package, which is part of the `tidyverse` collection which is already instlled. You can load just `ggplot`
 
-```{r eval = FALSE}
-install.packages("tidyverse")
+```{r}
+library(ggplot2)
 ```
 
-You only need to install `tidyverse` once. However, each time you open RStudio and would like to use ggplot you need to load the library for it. You also need to add this line to your Rmd file when you make your report.
+or all `tidyverse` which loads `ggplot2` with other packages
 
 ```{r}
 library(tidyverse)
@@ -133,29 +40,19 @@ library(tidyverse)
 
 ### Tutorials and resources
 
-You can make amazing graphs with ggplot, but there is a long learning curve so we will have multiple lab sessions on ggplot and graphing. We will continue with the Data Carpentries [Data visualization with ggplot2](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html). For today you only need to do 1/2 of the tutorial up to the boxplot challenge. Put the example and challenges in a separate file 4a. 
+You can make amazing graphs with ggplot, but there is a long learning curve so we will have multiple lab sessions on ggplot and graphing. Here are a few different resources for `ggplot`.
 
-Here are a few different resources for `ggplot`.
-
-* Hadley Wickham and Garrett Grolemund released a new book in 2017 [R for Data Science](http://r4ds.had.co.nz/).Chapter 3.1 to 3.5 covers material for this week's lab in ggplot.
+* Hadley Wickham and Garrett Grolemund released a new book in 2017 [R for Data Science](http://r4ds.had.co.nz/).  Chapter 3 covers material related to this week's lab in ggplot.
 * Another resource good for those with a visual learning style is [Maria Nattestad's Youtube videos](https://www.youtube.com/channel/UC2bWYX9h1KlaGWfTDuhASWg)
+* [ggplot cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
 
-## Exercises (Part 2)
+### Key board shortcuts
 
-5. Make plots using `geom_point()` of the 10 countries with the confirmed cases and deaths (two separate graphs) on 3/12/2020 and 9/12/2020.
-
-6. Make using `geom_bar` of the 10 states with the most confirmed cases and deaths (two separate graphs) on 3/12/2020 and 9/12/2020.
-
-```{r, eval=FALSE}
-  ggplot(aes(x = Deaths,  y = Country_Region)) + 
-    geom_bar(stat = 'identity') 
-```
-
-### What to upload
-
-To you Github web site add links to a file for lab 4 with the exercises and make a separate file for the examples and challenges from the [Data visualization with ggplot2](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html).
-
-On Moodle put the link to your Github web site (not the repo).
-
-If you want to get a start on next week we will be finishing the tuturial on [Data visualization with ggplot2](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html) to help with data wrangling and graphing the JHU covid time series data.
-
+* Selecting `shift` `ctrl` `m` at the same time is a keyboard shortcut for `%
+* Selecting `ctr` `alt` `i` at the same time is a keyboard shortcut for a new r code (Windows keyboard layout)
+* Selecting `option` `command` `i` at the same time is a keyboard shortcut for a new r code (Mac keyboard layout)
+To see more shortcuts in the menu `Tools` → `Keyboard Shortcuts Help`.
+## On the Computer
+Today's lab is a walk through of Data Carpentry's [ggplot tutorial](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html) up to (but not including) the sections on `Arranging and Explorting plots`.
+## What to upload to Moodle
+Create a report using R Markdown with all the [ggplot tutorial](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html) examples and with the challenges listed at the end.
