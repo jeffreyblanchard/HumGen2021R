@@ -1,0 +1,100 @@
+---
+title: "Lab 4 : Data wrangling and graphing COVID-19 reporting data (Part 1)"
+output:
+  html_document:
+    toc: true
+    toc_depth : 4
+    theme: united
+    highlight: tango
+editor_options: 
+  chunk_output_type: console
+---
+
+*I recognize, and fully understand, that this data maybe emotionally difficult to work. My intention is to make these lab relevant, allowing you to gather your own insights directly from new visualizations of the data. Please let me know if you would rather not work with the data.*
+
+## Learning Objectives
+
+* Build on data wrangling skills
+* Understanding the sources of SARS-CoV-2 incidence reports
+* Accessing data remotely
+* Basic line and bar graphs with ggplot
+
+## Visualizing COVID-19 cases, deaths and recoveries
+
+The virus has been recently renamed based on phylogenetic analysis (more on this next week) severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The disease caused by the virus is coronavirus disease (COVID-19). In this lab we will work with reporting data on COVID-19 cases, deaths and recoveries. 
+
+### Introduction to JHU case tracking data
+
+Researchers (Ensheng Dong, Hongru Du, Lauren Gardner) at John Hopkins University developed an [interactive dashboard](https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) to visual data and track reported cases of coronavirus disease 2019 (SARS-CoV-2) in real time. The underlying data is collated from the following sources and updated several times a day.
+
+It is important to understand that this data is only as accurate as the reporting and many cases of the disease go unreported because of a lack of testing. This some countries may have have confirmed cases because of more comprehensive testing. Thus, the reporting data represent a minimum number of cases. See recent posts and an article by UMass statistian [Prof. Nick Reich](https://twitter.com/reichlab)
+
+JHU researchers make data that goes into the [dashboard](https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) available on [Github repo for Novel Coronavirus (COVID-19) Cases](https://github.com/CSSEGISandData/COVID-19). In this lab we will work with this data. 
+
+Let's take a look at the files and the structure of data in the files.
+
+* csse_covid_19_data
+  + csse_covid_19_daily_reports
+    - 03-11-2020.csv
+    
+Open up the file to look at the structure 
+    
+The file contains the columns 
+
+Province/State 	Country/Region 	Last Update 	Confirmed 	Deaths 	Recovered 	Latitude 	Longitude
+
+It is important to note that for some countries there is only one row, while for others (e.g. China and US) there are multiple rows representing different provinces or states. Thus, we will need to sum these rows to get a total count for the US and China when we make graphs. From experience in making this tutorial I know the Column names with __/__ will cause errors in ggplot (). 
+
+## On the Computer
+
+### Making summary tables and graphs from the daily reports
+
+We are going to work with the data using __tidyverse__ functions
+
+```{r, message=FALSE}
+library(tidyverse)
+```
+                 
+Let's start by plotting data we looked at above looked at above). We can read data directly from the Github site. 
+
+1. Go to the file you want to download.
+2. Click it to view the contents within the GitHub UI.
+3. In the top right, right click the Raw button.
+4. Save as... or copy the url
+
+```{r, message=FALSE}
+report_03_11_2020 <-   read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-11-2020.csv")) %>%
+  rename(Country_Region = "Country/Region", Province_State = "Province/State")
+```
+
+Check the table properties to make sure the data imported as we expected
+
+```{r}
+str(report_03_11_2020)
+```
+
+Use `View()` (or in the top right corner click on Environment and then the data frame.) to inspect the data frame (tibble)
+
+```{r}
+View(report_03_11_2020)
+```
+
+## Exercises
+
+Today's exercises involve the application of what you learned in Lab 2 and 3 This step in applying your skills is often hard at first. Take your time and reread labs, then try some options. 
+
+Remember not to display large tables in RMarkdown. Use the DT package for showing the data tables where appropriate
+
+1. The format of the daily reports has changed over time. What are new data types (e.g. columns) that are were collected on 1/11/2021 relative to 3/11/2020? Load the both files into R directly from GitHub (see example above).  Note the in the more recent dates they have changed the column headers so that it is no longer necessary to rename `Province_State` and `Country_Region` (and will generate an error if applied). Use `str()` and `View()` (or in the top right corner click on Environment and then the data frame.).
+
+2. Determine the total Confirmed cases and Deaths for each of the above data for each country. Many countries have multiple entries representing different regions (e.g. counties and states). To get the counts for a country we need to summarise the data.  Use `group_by()` and `summarize()` to make a data frame (tibble) with total counts for each country. Report as a DT table.
+
+3. To get counts for confirmed cases per U.S state use `filter()` to select US and `group_by` and `summarize` as above. Report as a DT table.
+
+4. It will be difficult to make simple graphs with the data from all countries in the world or even the US states. Use `arrange` and `slice()` to get just the top 10 countries for Deaths. 
+
+5. Make plots using `geom_point()` of the top 10 countries with the deaths (two separate graphs) on 3/12/2020 and 1/12/2021. Include better x and y labels and a title.
+
+6. Above the countries are ordered alphabetically. Make new graphs using `geom_bar` with the countries order by # of deaths (Hint use y = reorder(Country_Region, Deaths) ). To change the scale from scientific to numeric use scale_x_continuous(labels = scales::number).
+
+
