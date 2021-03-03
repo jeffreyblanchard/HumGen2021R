@@ -105,7 +105,7 @@ Sometimes it is useful in controling the image layout for a report to file with 
 
 Another way to present a graph without the code is adding echo = FALSE within the r{} chunk - {r echo = FALSE}. This prevents code, but not the results from appearing in the knitr file.
 
-### Interactive graphs and tables in RMarkdown reports
+### Interactive graphs in RMarkdown reports
 
 With plotly/ggplotly (https://plot.ly/ggplot2/) you can make interactive graphs in your lab report.
 
@@ -136,7 +136,7 @@ Pay attention to how your graphs look in today's final knitted lab report. You w
 
 ### Exercise 1
 
-Using ggplot make a make a bar graph of the total SNP counts for each chromosome. Add title and labels for the x and y axis to Lab3 ex1. Set the fill of the bars to yellow and the outline (color) to black.
+Using ggplot make a make a bar graph of the total SNP counts for each chromosome. Add title and labels for the x and y axis. Set the fill of the bars to yellow and the outline (color) to black.
 
 ### Exercise 2
 
