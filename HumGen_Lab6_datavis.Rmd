@@ -195,7 +195,7 @@ p <- ggplot(daily_counts, aes(x = Date,  y = Daily, color = Country_Region)) +
 # Some people using a local installation of RStudio may needed to use this line instead
 animate(p, renderer = magick_renderer(), end_pause = 15)
 # If you are using RStudio Clould please use the following line (althought at the moment it is generating random green frames)
-# animate(p, end_pause = 15)
+# animate(p, renderer = gifski_renderer(), end_pause = 15)
 ```
 
 You can change the output to a gif file that can be used in slide presentations or a tweet. After you make the gif set EVAL=FALSE in your report so that it doesn't recreate the gif (this takes a fair amount of time) each time you Knit. 
