@@ -56,7 +56,7 @@ col_types =
 ```
 
 ```{r, fig.width = 8, fig.height = 2}
-# to adjust figure size {r, fig.width = 6, fig.height = 6}
+# to adjust figure size {r, fig.width = 8, fig.height = 2}
 ggplot(data = SNPs) + 
   geom_bar(mapping = aes(x = genotype)) + 
   ggtitle("Total SNPs for each genotype") +

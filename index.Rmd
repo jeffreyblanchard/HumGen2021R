@@ -17,3 +17,4 @@ This is a rendering of hmtl files from the course repository  (https://github.co
 * Lab 3 : [Graphing with the ggplot](HumGen_Lab3_datavis.html)
 * Lab 4 : [Data wrangling and graphing COVID-19 reporting data (Part 1)](HumGen_Lab4_datavis.html)
 * Lab 5 : [Publication Graphics](HumGen_Lab5_pub_graphics.html)
+* Lab 6 : [Lab 6 : Data wrangling, graphing and animating the COVID-19 reporting dat](HumGen_Lab6_datavis.html)
