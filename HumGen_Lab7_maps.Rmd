@@ -31,9 +31,6 @@ library(lubridate)
 library(viridis)
 library(wesanderson)
 library(plotly)
-library(gganimate)
-library(transformr)
-library(magick)
 ```
 
 
