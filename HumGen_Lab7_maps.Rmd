@@ -42,7 +42,7 @@ The ideas for this course tutorial came from multiple examples contributed by Pr
 1. [geom_maps](https://ggplot2.tidyverse.org/reference/geom_map.html)
 1. [Drawing beautiful maps programmatically with R, sf and ggplot2](https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html)
 
-For our labs two types of approaches will be used to add data to maps. The first that we worked with last week is based on using the longitude and latitude information to add a point at a specific position on a map. The second is two add the information to shapes in a map based on the name of the shape (e.g. states). Although ggmaps is a wonderful tool for mapping using Google Maps and other resources, it is beyond what is needed for now.
+For our labs two types of approaches will be used to add data to maps. The first is based on using the longitude and latitude information to add a point at a specific position on a map. The second is two add the information to shapes in a map based on the name of the shape (e.g. states). Although ggmaps is a wonderful tool for mapping using Google Maps and other resources, it is beyond what is needed for now.
 
 As in the previous labs the sources of data are from [Github repo for Novel Coronavirus (COVID-19) Cases](https://github.com/CSSEGISandData/COVID-19) that supports the [dashboard](https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6).
 
