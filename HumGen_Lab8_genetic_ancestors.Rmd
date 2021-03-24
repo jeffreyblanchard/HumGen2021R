@@ -134,7 +134,7 @@ The R code and some text is courtesy [Graham Coop](https://gcbias.org/). Other t
 
 ## Exercise 1
 
-Using the provided Rmd HumGen_Lab8_genetic_ancestors_code.Rmd file. Make new graphs of back 6, 8, 10 and 12 generations. Discuss the pattern of inheritance you observe. This is the only file to hand in today.
+Using the provided Rmd HumGen_Lab8_genetic_ancestors_code.Rmd file. Make new graphs of back 6, 8, 10 and 12 generations. You are going to need to change the legend text size as you add generations. Discuss the pattern of inheritance you observe. This is the only file to hand in today.
 
 ## Exercise 2
 
