@@ -1,5 +1,5 @@
 ---
-title: "Human Genome Analysis : Lab 8 Genealogical Tree Lab"
+title: "Lab 8 : Genetic and Genealogical Ancestors"
 output:
   html_document:
     toc: true
