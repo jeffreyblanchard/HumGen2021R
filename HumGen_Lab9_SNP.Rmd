@@ -23,13 +23,11 @@ __* This tutorial is derived from [Novel tools in R for population genomic analy
 
 ### If you NOT using RStudio Cloud. 
 
-If you NOT using RStudio Cloud you will need to download this files from [RGenome2021 GitHub](https://github.com/jeffreyblanchard/EvolutionaryGenomicsR/tree/master/data).
+If you NOT using RStudio Cloud you will need to download this file from [RGenome2021 GitHub](https://github.com/jeffreyblanchard/EvolutionaryGenomicsR/tree/master/data).
 
-* data/bibtexlib.bib
-* data/style.R
 * data/pinfsc50_filtered.vcf.gz
 
-You will also have to install the `vcfR`, `knitr` and `knitcitations` packages 
+You will also have to install the `vcfR` packages 
 
 ## Novel tools in R for population genomic analyses
 
