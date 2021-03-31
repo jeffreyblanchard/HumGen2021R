@@ -27,7 +27,7 @@ If you NOT using RStudio Cloud you will need to download this file from [RGenome
 
 * data/pinfsc50_filtered.vcf.gz
 
-You will also have to install the `vcfR` packages 
+You will also have to install the `vcfR` package.
 
 ## Novel tools in R for population genomic analyses
 
