@@ -1,5 +1,5 @@
 ---
-title: "Lab 9: Population genomics based on high throughput sequencing (HTS)"
+title: "Lab 9: Reading VCF data"
 output:
   html_document:
     toc: true
@@ -29,7 +29,7 @@ If you NOT using RStudio Cloud you will need to download this files from [RGenom
 * data/style.R
 * data/pinfsc50_filtered.vcf.gz
 
-You will also have to install the `vcfR`, `knitr` and `knitrcitations` packages 
+You will also have to install the `vcfR`, `knitr` and `knitcitations` packages 
 
 ## Novel tools in R for population genomic analyses
 
