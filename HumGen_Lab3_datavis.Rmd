@@ -52,7 +52,11 @@ You can make amazing graphs with ggplot, but there is a long learning curve so w
 * Selecting `ctr` `alt` `i` at the same time is a keyboard shortcut for a new r code (Windows keyboard layout)
 * Selecting `option` `command` `i` at the same time is a keyboard shortcut for a new r code (Mac keyboard layout)
 To see more shortcuts in the menu `Tools` → `Keyboard Shortcuts Help`.
+
 ## On the Computer
+
 Today's lab is a walk through of Data Carpentry's [ggplot tutorial](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html) up to (but not including) the sections on `Arranging and Explorting plots`.
+
 ## What to upload to Moodle
+
 Create a report using R Markdown with all the [ggplot tutorial](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html) examples and with the challenges listed at the end.
