@@ -1,294 +1,314 @@
 ---
-title: "Lab 9: Reading VCF data"
+title: "Human Genome Analysis Lab 9 : Linking 23andME SNPs to the NHGRI-EBI Catalog of published genome-wide association studies"
 output:
   html_document:
     toc: true
     toc_depth: 4
     theme: united
     highlight: tango
-bibliography: data/bibtexlib.bib
+editor_options: 
+  chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.align = "center")
-library("knitcitations")
-library("knitr")
-cite_options(citation_format = "pandoc", max.names = 3, style = "html", hyperlink = "to.doc")
-bib <- read.bibtex("data/bibtexlib.bib")
-source("data/style.R")
+## Learning objectives
+
+* Mapping your SNP data to phenotypes and the literature using gwascat and Promethease
+
+## Overview
+
+Today we will discuss two methods `gwascat` a R/Bioconductor package and Promethease for determining alleles associated with traits. 
+
+
+## Promethease 
+
+[Promethease](https://www.promethease.com/) is a commercial software system that does this mapping and returns the results in a web-based framework. Promethease computes a score for each risk allele and categories them as good, neutral and bad. I don't agree with this categorization. The score can be thought of as a way to prioritize important/interesting alleles. The cost is $12 and it is a quick way to screen your alleles. I will give a tour of the results during lab today. As you will see below we could pull much of this information together using R.
+
+## Bioconductor
+
+[Bioconductor](https://bioconductor.org/) is an open source, open development software project for genomic data analysis. There are thousands of software packages available and an active user community. R/Bioconductor is one of the primary mechanisms for publishing new genomic data analysis tools. We will use Bioconductor in the this and the following weeks labs.
+
+Bioconductor is already installed on RStudio Cloud. Install Bioconductor locally on your computer by typing in the R console 
+
+```{r eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.11")
 ```
 
-__* This tutorial is derived from [Novel tools in R for population genomic analyses](https://grunwaldlab.github.io/Population_Genetics_in_R/intro_vcf.html), [Reading VCF data](https://grunwaldlab.github.io/Population_Genetics_in_R/reading_vcf.html) and [Analysis of genome data](https://grunwaldlab.github.io/Population_Genetics_in_R/analysis_of_genome.html) by BJ Knaus, JF Tabima and NJ Grünwald__
+Individual packages that are not part of the BioConductor core can be installed using
 
-### If you NOT using RStudio Cloud. 
+```{r eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("name_of_package")
+# for example
+BiocManager::install("gwascat")
 
-If you NOT using RStudio Cloud you will need to download this file from [RGenome2021 GitHub](https://github.com/jeffreyblanchard/EvolutionaryGenomicsR/tree/master/data).
-
-* data/pinfsc50_filtered.vcf.gz
-
-You will also have to install the `vcfR` package.
-
-## Novel tools in R for population genomic analyses
-
-We now live in the fast growing era of high throughput sequencing (HTS) that is revolutionizing our ability to understand genetic variation `r citep(bib[c("grunwald2016population", "luikart2003power")])`. 
-Two factors are contributing to a need for new methods of analyzing data: 1. the data is now often in a genome-wide context where location within a genome is part of the analysis and 2. the number of variants are large. 
-
-The R computing language has become a great tool for analyzing population genomic data.
-A special issue in [Molecular Ecology Resources](http://onlinelibrary.wiley.com/doi/10.1111/men.2017.17.issue-1/issuetoc) provides a nice overview of the arsenal of tools available in R `r citep(bib["paradis2017towards"])`. 
-New tools have become available in R for analyzing HTS data including *adegenet* `r citep(bib[c("jombart2008adegenet")])`, *ape* `r citep(bib[c("paradis2004ape")])`, *vcfR* `r citep(bib["knaus2017vcfr"])`, and *poppr* `r citep(bib[c("kamvar2014poppr", "kamvar2015novel")])` among others. Section III of this primer is geared towards analyzing whole genome or reduced representation genomic data for populations using the variant call format (VCF).
-The next three chapters will focus on introducing the VCF file format, reading SNP data into R from high throughput sequencing projects, performing quality control, and conducting selected analyses using population genomic data.
-
-## Part I - Reading VCF data
-
-Genetic variation data is typically stored in [variant call format (VCF)](http://samtools.github.io/hts-specs/ "VCF format at hts-specs") files `r citep(bib["danecek2011variant"])`.
-This format is the preferred file format obtained from genome sequencing or high throughput genotyping.
-One advantage of using VCF files is that only variants (e.g., SNPs, indels, etc.) are reported which economizes files size relative to a format that may included invariant sites.
-Variant callers typically attempt to aggressively call variants with the perspective that a downstream quality control step will remove low quality variants.
-Note that VCF files come in different flavors and that each variant caller may report a slightly different information.
-A first step in working with this data is to understand their [contents](http://vcftools.sourceforge.net/VCF-poster.pdf).
-
-### VCF file structure
-
-A VCF file can be thought of as having three sections: a **vcf header**, a **fix region** and a **gt region**.
-The VCF meta region is located at the top of the file and contains meta-data describing the body of the file.
-Each VCF meta line begins with a '##'.
-The information in the meta region defines the abbreviations used elsewhere in the file.
-It may also document software used to create the file as well as parameters used by this software.
-Below the metadata region, the data are tabular.
-The first eight columns of this table contain information about each variant.
-This data may be common over all variants, such as its chromosomal position, or a summary over all samples, such as quality metrics.
-These data are fixed, or the same, over all samples.
-The fix region is required in a VCF file, subsequent columns are optional but are common in our experience.
-Beginning at column ten is a column for every sample.
-The values in these columns are information for each sample and each variant.
-The organization of each cell containing a genotype and associated information is specified in column nine, the FORMAT column.
-The location of these three regions within a file can be represented by this cartoon:
-
-
-```{r, fig.cap="Cartoon representation of VCF file organization", echo=FALSE, fig.height=4, fig.width=4, fig.align='center', }
-par(mar=c(0.1,0.1,0.1,0.1))
-plot(c(0,5), c(0,5), type="n", frame.plot=FALSE, axes=FALSE, xlab="", ylab="")
-rect(xleft=0, ybottom=4, xright=3, ytop=5)
-rect(xleft=0, ybottom=0, xright=2, ytop=4)
-rect(xleft=2, ybottom=0, xright=5, ytop=4)
-text(1.5, 4.7, "Meta information", cex=1)
-text(1.5, 4.4, "(@meta)", cex=1)
-text(1.0, 2.5, "Fixed information", cex=1)
-text(1.0, 2.2, "(@fix)", cex=1)
-text(3.5, 2.5, "Genotype information", cex=1)
-text(3.5, 2.2, "(@gt)", cex=1)
-par(mar=c(5,4,4,2))
 ```
 
+## Libraries for today's lab. 
 
-The VCF file specification is flexible.
-This means that there are slots for certain types of data, but any particular software which creates a VCF file does not necessarily use them all.
-Similarly, authors have the opportunity to include new forms of data, forms which may not have been foreseen by the authors of the VCF specification.
-The result is that all VCF files do not contain the same information.
+Note if you are working on your own computer (and not RStudio Cloud) you will need to install Bioconductor before installing `gwascat`.
 
+```{r, message = FALSE}
+# Load Libraries
+library(tidyverse)
+library(DT)
+library(gwascat)
+```
 
-For this example, we will use example data provided with the R package *vcfR* `r citep(bib["knaus2017vcfr"])`.
+## Exploring the traits associated with your genome using `gwascat`
 
+The below examples and text are from a blog post by [Adam Metcalf](https://dabblingwithdata.wordpress.com/2018/09/07/analysing-your-23andme-genetic-data-in-r-part-2-exploring-the-traits-associated-with-your-genome/). I have stripped down the text to make it easier to follow the steps on your computer, but the post is an enjoyable read and provides additional background.
+
+### First we need to load our 23andMe data
 
 ```{r}
-library(vcfR)
-data(vcfR_example)
-vcf
+# Load Files 
+mySNPs <- read_tsv("data/23andMe_complete.txt", comment = '#',
+col_types = 
+  cols(
+    rsid = col_character(),
+    chromosome = col_factor(),
+    position = col_integer(),
+    genotype = col_factor()
+  ))
 ```
 
-
-The function `library()` loads libraries, in this case the package *vcfR*.
-The function `data()` loads datasets that were included with R and its packages.
-Our usage of `data()` loads the objects 'gff', 'dna' and 'vcf' from the 'vcfR_example' dataset.
-Here we're only interested in the object 'vcf' which contains example VCF data.
-When we call the object name with no function it invokes the 'show' method which prints some summary information to the console.
-
-
-### The meta region
-
-
-The meta region contains information about the file, its creation, as well as information to interpret abbreviations used elsewhere in the file.
-Each line of the meta region begins with a double pound sign ('##').
-The example which comes with *vcfR* is shown below.
-(Only the first seven lines are shown for brevity.)
-
-
-```{r, echo=TRUE, tidy=TRUE}
-strwrap(vcf@meta[1:7])
-```
-
-
-The first line contains the version of the VCF format used in the file.
-This line is required.
-The second line specifies the software which created the VCF file.
-This is not required, so not all VCF files include it.
-When they do, the file becomes self documenting.
-Note that the alignment software is not included here because it was used upstream of the VCF file's creation (aligners typically create \*.SAM or \*.BAM format files).
-Because the file can only include information about the software that created it, the entire pipeline does not get documented.
-Some VCF files may contain a line for every chromosome (or supercontig or contig depending on your genome), so they may become rather long.
-Here, the remaining lines contain INFO and FORMAT specifications which define abbreviations used in the fix and gt portions of the file.
-
-
-The meta region may include long lines that may not be easy to view.
-In *vcfR* we've created a function to help press this data.
-
+As we have seen this file holds just the rsid, position, chromosome and genotype
 
 ```{r}
-queryMETA(vcf)
+head(mySNPs)
 ```
 
-
-When the function `queryMETA()` is called with only a *vcfR* object as a parameter, it attempts to summarize the meta information.
-Not all of the information is returned.
-For example, 'contig' elements are not returned.
-This is an attempt to summarize information that may be most useful for comprehension of the file's contents.
-
+Using `tidyverse` we can filter the data.
 
 ```{r}
-queryMETA(vcf, element = 'DP')
+filter(mySNPs, rsid == "rs174537")
 ```
 
+Not so exciting, but we can also use our rsid to link to [NHGRI-EBI Catalog of published genome-wide association studies](https://www.ebi.ac.uk/gwas/home)
 
-When an element parameter is included, only the information about that element is returned.
-In this example the element 'DP' is returned.
-We see that this acronym is defined as both a 'FORMAT' and 'INFO' acronym.
-We can narrow down our query by including more information in the element parameter.
+### `gwascat`: structuring and querying the NHGRI GWAS catalog
 
+[`gwascat`](https://bioconductor.org/packages/release/bioc/html/gwascat.html) is an R packackage for working with the NHGRI-EBI Catalog of published genome-wide association studies. 
+
+To get the catalog into a R data frame.
 
 ```{r}
-queryMETA(vcf, element = 'FORMAT=<ID=DP')
+updated_gwas_data <- as.data.frame(makeCurrentGwascat())
 ```
 
-
-Here we've isolated the definition of 'DP' as a 'FORMAT' element.
-Note that the function `queryMETA()` includes the parameter `nice` which by default is TRUE and attempts to present the data in a nicely formatted manner.
-However, our query is performed on the actual information in the 'meta' region.
-It is therefore sometimes appropriate to set `nice = FALSE` so that we can see the raw data.
-In the above example the angled bracket ('<') is omitted from the `nice = TRUE` representation but is essential to distinguishing the 'FORMAT' element from the 'INFO' element.
-
-
-### The fix region
-
-The fix region contains information for each variant which is sometimes summarized over all samples.
-The first eight columns of the fixed region are titled CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO.
-This is per variant information which is 'fixed', or the same, over all samples.
-The first two columns indicate the location of the variant by chromosome and position within that chromosome.
-Here, the ID field has not been used, so it consists of missing data (NA).
-The REF and ALT columns indicate the reference and alternate allelic states for a diploid sample.
-When multiple alternate allelic states are present they are delimited with commas.
-The QUAL column attempts to summarize the quality of each variant over all samples.
-The FILTER field is not used here but could contain information on whether a variant has passed some form of quality assessment.
-
-
-```{r, echo=TRUE}
-head(getFIX(vcf))
-```
-
-
-
-The eigth column, titled INFO, is a semicolon delimited list of information.
-It can be rather long and cumbersome.
-The function `getFIX()` will suppress this column by default.
-Each abbreviation in the INFO column should be defined in the meta section.
-We can validate this by querying the meta portion, as we did in the 'meta' section above.
-
-
-### The gt region
-
-
-The gt (genotype) region contains information about each variant for each sample.
-The values for each variant and each sample are colon delimited.
-Multiple types of data for each genotype may be stored in this manner.
-The format of the data is specified by the FORMAT column (column nine).
-Here we see that we have information for GT, AD, DP, GQ and PL.
-The definition of these acronyms can be referenced by querying the the meta region, as demonstrated previously.
-Every variant does not necessarily have the same information (e.g., SNPs and indels may be handled differently), so the rows are best treated independently.
-Different variant callers may include different information in this region.
-
-
-```{r, echo=TRUE, tidy=TRUE}
-vcf@gt[1:6, 1:4]
-```
-
-
-### vcfR
-
-
-Using the R package *vcfR*, we can read VCF format files into memory using the function `read.vcfR()`.
-Once in memory we can use the `head()` method to summarize the information in the three VCF regions.
-
+To find the date of the most recent study
 
 ```{r}
-vcf <- read.vcfR("data/pinfsc50_filtered.vcf.gz")
+max(updated_gwas_data$DATE.ADDED.TO.CATALOG)
 ```
 
+To get the most recent studies
 
 ```{r}
-head(vcf)
+last_update <- max(updated_gwas_data$DATE.ADDED.TO.CATALOG)
+filter(updated_gwas_data, DATE.ADDED.TO.CATALOG == last_update) %>% select(STUDY) %>% distinct()
+```
+
+To find the link on Pubmed to those studies
+
+```{r}
+filter(updated_gwas_data, DATE.ADDED.TO.CATALOG == last_update) %>% select(LINK) %>% distinct()
 ```
 
 
-After we have made any manipulations of the file we can save it as a VCF file with the function `write.vcf()`.
+### Joining mySNPs with the updated gwas data
 
+The GWAS data lists each SNP (e.g. “rs9302874”) in a field called SNPS. Our imported 23andme data has the same info in the rsid field. Hence we can do a simple join, here using the dplyr library.
 
-```{r, eval = FALSE}
-write.vcf(vcf, "data/myVCFdata_filtered.vcf.gz")
+```{r}
+mySNPs_gwas_table <- inner_join(mySNPs, updated_gwas_data, by = c("rsid" = "SNPS"))
+```
+
+Note the consequences of the inner join here. 23andme analyses SNPs that don’t appear in this GWAS database, and the GWAS database may contain SNPs that 23andme doesn’t provide for you. In either case, these will be removed in the above file result. There’ll just be rows for SNPs that 23andme does provide you, and that do have an entry in the GWAS database.
+
+Also, the GWAS database may have several rows for a single SNP. It could be that several studies examined a single SNP, or that one study found many traits potentially associated with a SNP. This means your final “output_data” table above will have many rows per for some SNPs.
+
+How shall we narrow down this data-mass to find something potentially interesting?
+
+There are many fields in the GWAS database you might care about – the definitions being listed here. For us amateur folks here, DISEASE.TRAIT and STRONGEST.SNP.RISK.ALLELE might be of most interest.
+
+DISEASE.TRAIT gives you a genericish name for the trait that a study investigated whether there was an association with a given SNP (e.g. “Plasma omega-3 polyunsaturated fatty acid levels”, or “Systolic blood pressure”). Note that the values are not actually all “diseases” by the common-sense meaning – unless you consider traits like being tall a type of illness anyway.
+
+STRONGEST.SNP.RISK.ALLELE gives you the specific allele of the SNP that was “most strongly” associated with that trait in the study (or potentially a ? if unknown, but let’s ignore those for now). The format here is to show the name of the SNP first, then append a dash and the allele of interest afterwards e.g. “rs10787517-A” or “rs7977462-C”.
+
+Back to an exploration of your genome – the two most obvious approaches that come to mind are either: 1) check whether your 23andme results suggest an association with a specific trait you’re interested in, or 2) check which traits your results may be associated with.
+
+In either case, it’ll be useful to create a field that highlights whether your 23andme results indicate that you have the “strongest risk allele” for each study. This is one way to help narrow down towards the interesting traits you may have inherited.
+
+The 23andme part of of your dataframe contains your personal allele results in the genotype field. There you’ll see entries like “AC” or “TT”. What we really want to do here is, for every combination of SNP and study, check to see if either of the letters in your genotype match up with the letter part of the strongest risk allele.
+
+One method would be to separate out your “genotype” data field into two individual allele fields (so “AC” becomes “A” and “C”). Next, clean up the strongest risk allele so you only have the individual allele (so “rs10787517-A”  becomes “A”). Finally check whether either or both of your personal alleles match the strongest risk allele. If they do, there might be something of interest here.
+
+The below code will cover this.
+
+```{r}
+mySNPs_gwas_table$risk_allele_clean <- str_sub(mySNPs_gwas_table$STRONGEST.SNP.RISK.ALLELE, -1)
+mySNPs_gwas_table$my_allele_1 <- str_sub(mySNPs_gwas_table$genotype, 1, 1)
+mySNPs_gwas_table$my_allele_2 <- str_sub(mySNPs_gwas_table$genotype, 2, 2)
+mySNPs_gwas_table$have_risk_allele_count <- if_else(mySNPs_gwas_table$my_allele_1 == mySNPs_gwas_table$risk_allele_clean, 1, 0) + if_else(mySNPs_gwas_table$my_allele_2 == mySNPs_gwas_table$risk_allele_clean, 1, 0)
+```
+
+Now you have your two individual alleles stored in my_allele_1 and my_allele_2, and the allele for the “highest risk” stored in risk_allele_clean. Risk_allele_clean is the letter part of the GWAS STRONGEST.SNP.RISK.ALLELE field. And finally, the have_risk_allele_count is either 0, 1 or 2 depending on whether your 23andme genotype result at that SNP contains 0, 1 or 2 of the risk alleles.
+
+The previously mentioned DISEASE.TRAIT field contains a summary of the trait involved. So by filtering your dataset to only look for studies about a trait you care about, you can see a summary of the risk allele and whether or not you have it, and the relevant studies that elicited that connection.
+
+For example, let’s assume that by now we also inevitably developed a strong interest in omegas and fatty acids. Which SNPs may relate to that topic, and do we personally have the risk allele for any of them?
+
+We can use the str_detect function of the stringr library in order to search for any entries that contain the substring “omega” or “fatty acid”.
+
+```{r}
+select(mySNPs_gwas_table, rsid, DISEASE.TRAIT, risk_allele = risk_allele_clean, your_geneotype = genotype) %>% 
+ filter(str_detect(tolower(DISEASE.TRAIT), "omega") | str_detect(tolower(DISEASE.TRAIT), "fatty acid")) %>%
+ distinct()
+```
+
+To find out if a particular allele is associated with other traits
+
+```{r}
+ select(mySNPs_gwas_table, rsid, DISEASE.TRAIT, STUDY) %>% 
+ filter(!str_detect(tolower(DISEASE.TRAIT), "omega") & !str_detect(tolower(DISEASE.TRAIT), "fatty acid")) %>%
+ distinct() %>%
+ filter(rsid == "rs174537")
+```
+
+Now onto the second approach – this time, you don’t have a specific trait in mind. You’re more interested in discovering which traits have risk alleles that match the respective part of your genome. 
+
+We already have our have_risk_allele_count field. If it’s 1 or 2 then you have some sort of match. So, the full list of your matches and the associated studies could be retrieved in a manner like this.
+
+```{r}
+filter(mySNPs_gwas_table, have_risk_allele_count >= 1) %>%
+ select(rsid, your_genotype = genotype, strongest_risk_allele = risk_allele_clean, DISEASE.TRAIT, STUDY )
+```
+
+Note that this list is likely to be long. Some risk alleles are very common in some populations, and remember that there may be many studies that relate to a single SNP, or many SNPs referred to by a single study. You might want to pop it in a nice DT Javascript DataTable to allow easy searching and sorting.
+
+```{r}
+datatable(
+ filter(mySNPs_gwas_table, have_risk_allele_count >= 1) %>%
+ select(rsid, your_genotype = genotype, strongest_risk_allele = risk_allele_clean, DISEASE.TRAIT, STUDY )
+)
 ```
 
 
-`write.vcf()`will write a file to your active directory.
-We now have a summary of our VCF file which we can use to help understand what forms of information are contained within it.
-This information can be further explored with plotting functions and used to filter the VCF file for high quality variants as we will see in the next section.
+There are various other fields in the GWAS dataset you might consider using to filter down further. For example, you might be most interested in findings from studies that match your ethnicity, or occasions where you have risk alleles that are rare within the population. After all, we all like to think we’re special snowflakes, so if 95% of the general population have the risk allele for a trait, then that may be less interesting than one where you are in the lucky or unlucky 1%.
 
+For the former, you might try searching within the INITIAL.SAMPLE.SIZE or REPLICATION.SAMPLE.SIZE fields, which has entries like: “272 Han Chinese ancestry individuals” or “1,180 European ancestry individuals from ~475 families”.
 
-### Exercises
+Similar to the caveats on searching the trait fields, one does need to be careful here if you’re looking for a comprehensive set of results. Some entries in the database have blanks in one of these fields, and others don’t specify ethnicities, having entries like “Up to 984 individuals”.
 
+For the proportion of the studied population who had the risk allele, it’s the RISK.ALLELE.FREQUENCY field. Again, this can sometimes be blank or zero. But in theory, where it has a valid value, then, depending on the study design, you might find that lower frequencies are rarer traits.
 
-**1)** How would we find more information about `read.vcfR()`?
+We can use dplyr‘s arrange and filter functions to sort do the above sort of narrowing-down. For example: what are the top 10 trait / study / SNP combinations you have the risk allele for that were explicitly studied within European folk, ordered by virtue of them having the lowest population frequencies reported in the study?
 
-```{r hide_button = TRUE, eval = FALSE}
-?read.vcfR
+```{r}
+datatable(
+ filter(mySNPs_gwas_table,have_risk_allele_count > 0 & (str_detect(tolower(INITIAL.SAMPLE.SIZE), "european") | str_detect(tolower(REPLICATION.SAMPLE.SIZE), "european")) & (RISK.ALLELE.FREQUENCY > 0 & !is.na(RISK.ALLELE.FREQUENCY))) %>%
+ arrange(RISK.ALLELE.FREQUENCY) %>%
+ select(rsid, your_genotype = genotype, DISEASE.TRAIT, INITIAL.SAMPLE.SIZE,RISK.ALLELE.FREQUENCY)
+ )
+```
+
+Or perhaps you’d prefer to prioritise the order of the traits you have the risk allele for, for example, based on the number of entries in the GWAS database for that trait where the highest risk allele is one you have. You might argue that these could be some of the most reliably associated traits, in the sense that they would bias towards those that have so far been studied the most, at least within this database.
+
+```{r}
+trait_entry_count <- group_by(mySNPs_gwas_table, DISEASE.TRAIT) %>%
+ filter(have_risk_allele_count >= 1) %>%
+ summarise(count_of_entries = n())
+
+ggplot(filter(trait_entry_count, count_of_entries > 100), aes(x = reorder(DISEASE.TRAIT, count_of_entries, sum), y = count_of_entries)) +
+ geom_col() +
+ coord_flip() +
+ theme_bw() +
+ labs(title = "Which traits do you have the risk allele for\nthat have over 100 entries in the GWAS database?", y = "Count of entries", x = "Trait")
 ```
 
 
-**2)** How would we learn what the acronym "AD" stands for?
+Now, as we’re counting combinations of studies and SNPs per trait here, this is obviously going to be somewhat self-fulfilling as some traits have been featured in way more studies than others. Likewise some traits may have been associated with many more SNPs than others. Also, recalling that many interesting traits seem to be related to a complex mix of SNPs, each of which may only have a tiny effect size, it might be that whilst you do have 10 of the risk alleles for condition X, you also don’t have the other 20 risk alleles that we discovered so far have an association (let alone the 100 weren’t even publish on yet and hence aren’t in this data!).
 
+Maybe then we can sort our output in a different way. How about we count the number of distinct SNPs where you have the risk allele, and then express those as a proportion of the count of all the distinct SNPs for the given trait in the database, whether not you have the risk allele? This would let us say things such as, based (solely) on what in this database, you have 60% of the known risk alleles associated with this trait.
 
-```{r hide_button = TRUE}
-queryMETA(vcf, element = 'AD')
+One thing noted in the data, both the 23andme genome data and the gwascat highest risk allele have unusual values in the allele fields – things like ?, -, R, D, I and some numbers based on the fact the “uncleaned” STRONGEST.SNP.RISK.ALLELE didn’t have a -A, -C, -G or -T at the end of the SNP it named. Some of these entries may be meaningful – for example the D and I in the 23andme data refer to deletes and insertions, but won’t match up with anything in the gwascat data. Others may be more messy or missing data, for example 23andme reports “–” if no genotype result was provided for a specific SNP call.
+
+In order to avoid these inflating the proportion’s denominator we’ll just filter down so that we only consider entries where our gwascat-derived “risk_allele_clean” and  23andme-derived “my_allele_1” and “my_allele_2″ are all one of the standard A, C, G or T bases.
+
+Let’s also colour code the results by the rarity of the SNP variant within the studied population. That might provide some insight to exactly what sort of special exception we are as an individual – although some of the GWAS data is missing that field and basic averaging won’t necessarily give the correct weighting, so this part is extra…”directional”.
+
+You are no doubt getting bored with the sheer repetition of caveats here – but it is so important. Whilst these are refinements of sorts, they are simplistic and flawed and you should not even consider concluding something significant about your personal health without seeking professional advice here. This is fun only. Well, for for those of us who could ever possibly classify data as fun anyway.
+
+Here we go, building it up one piece at a time for clarity of some kind:
+
+```{r, fig.width=8, fig.height=4}
+# Summarise proportion of SNPs for a given trait where you have a risk allele
+
+trait_snp_proportion <-  filter(mySNPs_gwas_table, risk_allele_clean %in% c("C" ,"A", "G", "T") & my_allele_1 %in% c("C" ,"A", "G", "T") & my_allele_2 %in% c("C" ,"A", "G", "T") ) %>%
+mutate(you_have_risk_allele = if_else(have_risk_allele_count >= 1, 1, 0)) %>%
+ group_by(DISEASE.TRAIT, you_have_risk_allele) %>%
+ summarise(count_of_snps = n_distinct(rsid)) %>%
+ mutate(total_snps_for_trait = sum(count_of_snps), proportion_of_snps_for_trait = count_of_snps / sum(count_of_snps) * 100) %>%
+ filter(you_have_risk_allele == 1) %>%
+ arrange(desc(proportion_of_snps_for_trait)) %>%
+ ungroup()
+
+# Count the studies per trait in the database
+
+trait_study_count <- filter(mySNPs_gwas_table, risk_allele_clean %in% c("C" ,"A", "G", "T") & my_allele_1 %in% c("C" ,"A", "G", "T") & my_allele_2 %in% c("C" ,"A", "G", "T") ) %>%
+ group_by(DISEASE.TRAIT) %>%
+ summarise(count_of_studies = n_distinct(PUBMEDID), mean_risk_allele_freq = mean(RISK.ALLELE.FREQUENCY))
+
+# Merge the above together
+
+trait_snp_proportion <- inner_join(trait_snp_proportion, trait_study_count, by = "DISEASE.TRAIT")
+
+# Plot the traits where there were more than 2 studies and you have risk alleles for more than 70% of the SNPs studied
+
+ggplot(filter(trait_snp_proportion, count_of_studies > 1 & proportion_of_snps_for_trait > 70), aes(x = reorder(DISEASE.TRAIT, proportion_of_snps_for_trait, sum), y = proportion_of_snps_for_trait, fill = mean_risk_allele_freq)) +
+ geom_col() +
+ coord_flip() +
+ theme_bw() + 
+ labs(title = "Traits I have more than half of the risk\nalleles studied where > 1 studies involved", 
+ y = "% of SNPs with risk allele", x = "Trait", fill = "Mean risk allele frequency") 
+
 ```
 
+## Exercises
 
-**3)** We used the `head()` function to view the **first** few lines of `fix` data.
-How would we view the **last** few lines of `fix` data?
+Only do these exercises after you have complete the above examples. The questions assume you already have the data objects loaded into R.
 
+### Exercise #1
 
-```{r hide_button = TRUE}
-tail(vcf@fix)
+Use str() to show columns and data types. Which column shows the allele frequency in a population? What does it mean if the allele frequncy is high in terms of linkage to disease whose trait is only expressed in 1% of the population.
+
+### Exercise #2
+
+Modify the below code to select for Type 2 Diabtes risk alleles (put the trait of interest in lower case)
+
+```{r, eval=FALSE}
+select(mySNPs_gwas_table, rsid, DISEASE.TRAIT, risk_allele = risk_allele_clean, your_geneotype = genotype) %>% 
+ filter(str_detect(tolower(DISEASE.TRAIT), "omega") | str_detect(tolower(DISEASE.TRAIT), "fatty acid")) %>%
+ distinct()
 ```
 
-**4)** There is a column in the `fix` portion of the data called `QUAL`.
-It is not defined in the `meta` portion of the data because it is defined in the [VCF specification](http://samtools.github.io/hts-specs/).
-It stands for 'quality'.
-Does `QUAL` appear useful to us? Why or why not?
+### Exercise #3
 
-```{r hide_button = TRUE}
-plot(vcf)
-# Alternate ggplot2 answer.
-library(ggplot2)
-qplot(getQUAL(vcf), geom = "histogram")
-```
+Now modify the above to find which risk alleles that person has for Type 2 diabetes
 
 
-**5)** How would we query the sample names?
+### Exercise #4
 
-```{r hide_button = TRUE}
-colnames(vcf@gt)
-```
+Repeat Ex #2 and #3 using a trait of your choice
 
-Note that the first column is `FORMAT`.
-This tells us the format for data for each variant.
-According to the VCF specification this can be different for each variant.
+### Exercise #5
 
-## References
+Make a DT table of `trait_snp_proportion` 
+
+### Excerise #6
+
+Make a graph of traits with a risk allele frequency below 0.15 showing the % of SNPs with risk allele

@@ -20,4 +20,4 @@ This is a rendering of hmtl files from the course repository  (https://github.co
 * Lab 6 : [Data wrangling, graphing and animating the COVID-19 reporting data](HumGen_Lab6_datavis.html)
 * Lab 7 : [Maps](HumGen_Lab7_maps.html)
 * Lab 8 : [Genetic and genealogical ancestors](HumGen_Lab8_genetic_ancestors.html)
-* Lab 9 : [Reading VCF data](HumGen_Lab9_SNP.html)
+* Lab 9 : [Linking 23andME SNPs to the NHGRI-EBI Catalog of published genome-wide association studies](HumGen_Lab9_SNP.html)
