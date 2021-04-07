@@ -12,16 +12,7 @@ editor_options:
 
 ## Learning objectives
 
-* Mapping your SNP data to phenotypes and the literature using gwascat and Promethease
-
-## Overview
-
-Today we will discuss two methods `gwascat` a R/Bioconductor package and Promethease for determining alleles associated with traits. 
-
-
-## Promethease 
-
-[Promethease](https://www.promethease.com/) is a commercial software system that does this mapping and returns the results in a web-based framework. Promethease computes a score for each risk allele and categories them as good, neutral and bad. I don't agree with this categorization. The score can be thought of as a way to prioritize important/interesting alleles. The cost is $12 and it is a quick way to screen your alleles. I will give a tour of the results during lab today. As you will see below we could pull much of this information together using R.
+* Mapping your SNP data to phenotypes and the literature using gwascat
 
 ## Bioconductor
 
