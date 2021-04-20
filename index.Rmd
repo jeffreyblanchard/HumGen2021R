@@ -21,4 +21,5 @@ This is a rendering of hmtl files from the course repository  (https://github.co
 * Lab 7 : [Maps](HumGen_Lab7_maps.html)
 * Lab 8 : [Genetic and genealogical ancestors](HumGen_Lab8_genetic_ancestors.html)
 * Lab 9 : [Linking 23andME SNPs to the NHGRI-EBI Catalog of published genome-wide association studies](HumGen_Lab9_SNP.html)
+* Lab 10 : [Analysis of transcriptome (RNA-Seq) data](HumGen_Lab10_rnaseq.html)
 * Your Genome Report : [Report](HumGen_Report.html)
