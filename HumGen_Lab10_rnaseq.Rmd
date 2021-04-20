@@ -24,7 +24,7 @@ When you are trying to understand a new analysis method, a good strategy is to
 2. Go through a tutorial and/or R vignette with the tools/packages you will need.
 3. Apply the tutorials/vignettes to your experiment.
 
-Today we will go through steps 1 and 2. For an introduction to RNAseq analysis we will discuss this [Galaxy workflow](https://galaxyproject.org/tutorials/rb_rnaseq/). The steps involving __read mapping__, __transcript quantification__, and __read counting__ are usually done on a Unix computer using the command line or an interface to a Unix computer such as Galaxy. We will go through these steps in the tutorial and then in a later lab on a Unix virtual machine or the MGHPCC. Today in lab we will work on __differential expression analysis in R__. 
+Today we will go through steps 1 and 2. For an introduction to RNAseq analysis we will discuss this [Galaxy workflow](https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/rb-rnaseq/tutorial.html). The steps involving __read mapping__, __transcript quantification__, and __read counting__ are usually done on a Unix computer using the command line or an interface to a Unix computer such as Galaxy. We will go through these steps in the tutorial and then in a later lab on a Unix virtual machine or the MGHPCC. Today in lab we will work on __differential expression analysis in R__. 
 
 
 ## Introduction to a RNA-Seq differential expression workflow
