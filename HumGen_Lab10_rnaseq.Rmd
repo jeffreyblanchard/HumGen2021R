@@ -54,6 +54,8 @@ We will go step wise through a Bioconductor workflow vignette [RNA-seq workflow:
 
 ## Exercises
 
+* Important note: At the beginning of the Rmd file (or just before library("org.Hs.eg.db") add the line options(connectionObserver = NULL) 
+
 1. Read through the [html](https://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html) version of the vignette.
 2. I have included the [R script](https://master.bioconductor.org/packages/release/workflows/html/rnaseqGene.html) in RStudioCloud. If you are doing this on your own computer, download the file rnaseq.R to make sure the vignette runs properly on your computer and so that you can see the steps involved. Note that vignette uses `tidyverse` packages `ggplot2` and `dyplr`, but also makes use of core R plotting packages. 
 3. Transform the R script that is part of the vignette into a .Rmd file, adding captions and your own notes along the way. This is a good time to __explore__ by changing the vignette code. Note that the workflow in R starts with __2.3 Reading in data with tximeta__. The step previous to this __2.2 Quantifying with Salmon__ is done outside of R on a Unix computer or Galaxy.
