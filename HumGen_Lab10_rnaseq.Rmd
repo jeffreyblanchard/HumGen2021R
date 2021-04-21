@@ -78,7 +78,7 @@ A. Use `head` to show the columns after this step.
 
 B. To show the information associated with these samples use `colData` on any of the 3 above data objects (similar to a previous step in the tutorial).
 
-C. Use `head` again to show what the titles in dds look like after the step `colnames(df)[1:2] <- c("x", "y")`
+C. Use `head` again to show what the titles in df look like after the step `colnames(df)[1:2] <- c("x", "y")`
 
 D. Add x and y labels and a title to the graph showing the comparisions of the two samples with the 3 transformations.
 
