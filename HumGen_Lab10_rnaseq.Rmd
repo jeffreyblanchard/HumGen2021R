@@ -90,13 +90,15 @@ In the section `ggplotpca` change the PCA plot to color the points by cell type 
 
 ### Exercise 6
 
-DESeq2 uses the Benjamini-Hochberg (BH) adjustment.  If we increase the bar for significance testing to 0.01. How many such genes are there? 
+In the section `airwayDE` DESeq2 uses the Benjamini-Hochberg (BH) adjustment.  If we increase the bar for significance testing to 0.01. How many such genes are there? 
 
 ### Exercise 7
 
 Just before the `plotcounts` section significant genes that have the highest fold increase after treatment are shown. Show the significant genes which decrease the most after after treatment
 
 ### Exercise 8
+
+In the `genescluster` section. 
 
 A. Modify the graph to show a heat plot from the 50 genes with the highest variance across samples. Are the same hierarchical cluster patterns retained as in the graph with the top 20 genes? 
 
