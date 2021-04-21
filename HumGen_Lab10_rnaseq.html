@@ -507,7 +507,7 @@ pre code {
 </div>
 <div id="exercises" class="section level2">
 <h2>Exercises</h2>
-<p>The below exercises are based on understanding and adapting code from a tutorial “RNA-Seq workflow: gene-level exploratory analysis and differential expression”. The exercises build on your knowledge of base R graphics and ggplot. Go slowly and try to understand each step. Add code chunks for exercises 4-9 at the end of your .Rmd file with the tutorial code.</p>
+<p>The below exercises are based on understanding and adapting code from a tutorial “RNA-Seq workflow: gene-level exploratory analysis and differential expression”. The exercises build on your knowledge of base R graphics and ggplot. Go slowly and try to understand each step. Add code chunks for exercises 4- at the end of your .Rmd file with the tutorial code.</p>
 <ul>
 <li>Important note: At the beginning of the Rmd file add the line options(connectionObserver = NULL) within a R code chunk.</li>
 </ul>
@@ -525,7 +525,7 @@ pre code {
 </div>
 <div id="exercise-4" class="section level3">
 <h3>Exercise 4</h3>
-<p>In the <code>transformplot</code> section a data frame (dds) is created by binding together select columns from data objects <code>dds</code>, <code>vsd</code> and <code>rld</code> that have different transformations of the data.</p>
+<p>In the <code>transformplot</code> section a data frame (df) is created by binding together select columns from data objects <code>dds</code>, <code>vsd</code> and <code>rld</code> that have different transformations of the data.</p>
 <p>A. Use <code>head</code> to show the columns after this step.</p>
 <p>B. To show the information associated with these samples use <code>colData</code> on any of the 3 above data objects (similar to a previous step in the tutorial).</p>
 <p>C. Use <code>head</code> again to show what the titles in dds look like after the step <code>colnames(df)[1:2] &lt;- c(&quot;x&quot;, &quot;y&quot;)</code></p>
