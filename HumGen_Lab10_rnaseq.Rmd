@@ -74,7 +74,7 @@ Transform the R script that is part of the vignette into a .Rmd file, adding cap
 
 In the `transformplot` section a data frame (df) is created by binding together select columns from data objects `dds`, `vsd` and `rld` that have different transformations of the data. 
 
-A. Use `head` to show the columns after this step.
+A. Use `head` to show the names columns after this step.
 
 B. To show the information associated with these samples use `colData` on any of the 3 above data objects (similar to a previous step in the tutorial).
 

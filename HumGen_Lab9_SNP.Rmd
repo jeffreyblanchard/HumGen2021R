@@ -275,7 +275,7 @@ Only do these exercises after you have complete the above examples. The question
 
 ### Exercise #1
 
-Use str() to show columns and data types. Which column shows the allele frequency in a population? What does it mean if the allele frequncy is high in terms of linkage to disease whose trait is only expressed in 1% of the population.
+Use str() to show columns and data types. Which column in `mySNPs_gwas_table` shows the allele frequency in a population? What does it mean if the allele frequncy is high in terms of linkage to disease whose trait is only expressed in 1% of the population.
 
 ### Exercise #2
 
